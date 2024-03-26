@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Twitchmarket </title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="title" content="Twitchmarket">
+    <meta name="description" content="A Twitch Integration for the game Supermarket Simulator on Steam">
+    <meta name="keywords" content="Supermarket, Simulator, Twitch, custom, Integration, streaming, letsiii, letsi">
+    <meta name="author" content="letsi">
+    <meta name="og:image" content="https://bilder.letsi.de/extension/github/Supermarket%20Simulator%20Background.png">
+    <meta name="og:url" content="https://letsi.github.io/Twitchmarket">
+
+    <style>
+      @import url("https://fonts.cdnfonts.com/css/typo-square-demo");
+
+      body {
+        display: flex;
+        justify-content: center;
+        font-family: "Typo Square Bold Demo", sans-serif;
+        font-size: 16px;
+        background-image: url("https://bilder.letsi.de/extension/github/Supermarket%20Simulator%20Background.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+      }
+
+      main {
+        padding: 1rem 1.5rem;
+        border: 1px solid #000;
+        border-radius: 6px;
+        margin-top: 2rem;
+        color: #dcdee0;
+        width: 50%;
+        min-width: 330px;
+        background-color: rgba(0, 0, 0, 50%);
+        backdrop-filter: blur(3px);
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        text-align: center;
+      }
+
+      header {
+        margin-bottom: 2rem;
+      }
+
+      ol {
+        list-style: none;
+        counter-reset: steps;
+      }
+
+      ol li {
+        margin: 1rem 0;
+        position: relative;
+        counter-increment: steps;
+      }
+
+      ol li::before {
+        position: absolute;
+        left: -2.25rem;
+        content: counter(steps);
+        width: 1.5rem;
+        height: 1.5rem;
+        border: 2px solid #ffffff;
+        border-radius: 50px;
+        display: inline-block;
+        text-align: center;
+        margin-right: 1rem;
+      }
+
+      #card-footer {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+      }
+
+      .btn {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: #9147ff;
+        color: #fff;
+        text-decoration: none;
+        border: 0;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background-color: #772ce8;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .input-grp {
+        padding: 1rem 1.5rem;
+        display: flex;
+      }
+
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.5rem 1rem;
+        border: 2px solid #aa74f9;
+      }
+
+      b {
+        color: rgb(255, 162, 162);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Twitchmarket</h1>
+        <h2>Supermarket Simulator - Twitch Integration</h2>
+      </header>
+
+      <div id="intro">
+        <p>Please follow the steps below to configure the mod correctly:</p>
+
+        <ol>
+          <li>
+            Click on the button below to allow the mod to fetch viewers from
+            your Twitch chat.<br />
+            <small
+              >After authorization is complete, you will be redirected back to
+              this page.</small
+            >
+          </li>
+          <li>
+            Copy the secret into the config.
+            <br /><small
+              >Please <b>DO NOT SHARE</b> this secret with anyone!</small
+            >
+          </li>
+          <li>Now your viewers can visit your supermarket!</li>
+        </ol>
+
+        <div id="card-footer">
+          <a
+            class="btn"
+            href="https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=2af259damli532xxh1z5mmmwtvv58g&redirect_uri=http://localhost:3000&scope=moderator%3Aread%3Achatters+chat%3Aread+chat%3Aedit"
+          >
+            Authorize now
+          </a>
+        </div>
+      </div>
+      <div id="complete" class="hidden">
+        <p>
+          Copy the secret below into the config<br /><small
+            >Please <b>DO NOT SHARE</b> this secret with anyone!</small
+          >
+        </p>
+
+        <div class="input-grp">
+          <input type="text" id="client-secret" readonly />
+          <button class="btn" id="copy-token">Copy</button>
+        </div>
+      </div>
+    </main>
+    <script type="text/javascript">
+      const hash = document.location.hash;
+      if (!!hash) {
+        document.getElementById("intro").classList.add("hidden");
+        document.getElementById("complete").classList.remove("hidden");
+
+        const client_secret = hash.match(/access_token=([^&]+)/)[1];
+        document.getElementById("client-secret").value = `oauth:${client_secret}`;
+
+        document.getElementById("copy-token").addEventListener("click", (e) => {
+          e.preventDefault();
+          navigator.clipboard.writeText(`oauth:${client_secret}`);
+        });
+      }
+    </script>
+  </body>
+</html>
